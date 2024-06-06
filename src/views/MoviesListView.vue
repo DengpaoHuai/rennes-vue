@@ -1,8 +1,16 @@
 <script setup lang="ts">
+import { deleteMovie } from '@/services/movies.service';
 import useMovies from '@/store/useMoviesStore';
 import { storeToRefs } from 'pinia';
 
-const { movies } = storeToRefs(useMovies())
+const movieStore = useMovies()
+const { movies } = storeToRefs(movieStore)
+const { deleteMovieById } = movieStore
+
+const deleteItem = async (id: string) => {
+    await deleteMovie(id)
+    deleteMovieById(id)
+}
 
 </script>
 
@@ -14,7 +22,9 @@ const { movies } = storeToRefs(useMovies())
         <ul v-if="movies">
             <li v-for="movie in movies" :key="movie._id">
                 {{ movie.title }}
+                <button @click="deleteItem(movie._id)">supprimer</button>
             </li>
+
         </ul>
     </div>
 </template>

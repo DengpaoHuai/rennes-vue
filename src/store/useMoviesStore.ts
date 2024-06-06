@@ -18,8 +18,10 @@ const useMovies = defineStore('movies', () => {
   const addMovie = (movie: Movie) => {
     movies.value.push(movie)
   }
-
-  return { movies, addMovie }
+  const deleteMovieById = (id: string) => {
+    movies.value = movies.value.filter((movie) => movie._id !== id)
+  }
+  return { movies, addMovie, deleteMovieById }
 })
 
 export default useMovies

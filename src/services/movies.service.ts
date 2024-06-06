@@ -18,3 +18,9 @@ export const getMovies = async (): Promise<Movie[]> => {
 }
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
+export const deleteMovie = async (id: string): Promise<void> => {
+  await fetch(`https://crudcrud.com/api/9c6cb3e8adf34de79a6280930b2d6a19/movies/${id}`, {
+    method: 'DELETE'
+  })
+}
