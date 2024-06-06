@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import CounterComponent from './components/CounterComponent.vue';
+import { RouterView } from 'vue-router';
+
 
 
 </script>
 
 <template>
-  <CounterComponent></CounterComponent>
+  <RouterView></RouterView>
 </template>
 
 <style scoped>
