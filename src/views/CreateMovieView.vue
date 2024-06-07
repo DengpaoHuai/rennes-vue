@@ -6,7 +6,7 @@ import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 const router = useRouter()
 const { addMovie } = useMovies()
-
+import CustomInput from '@/components/CustomInput.vue'
 const form = reactive({
     title: '',
     description: '',
@@ -27,9 +27,9 @@ const submit = async () => {
 <template>
 
     <form @submit.prevent="submit">
-        <input v-model="form.title" type="text" placeholder="Title" />
-        <input v-model="form.description" type="text" placeholder="Description" />
-        <input v-model="form.director" type="text" placeholder="Director" />
+        <CustomInput v-focus v-model="form.title" type="text" placeholder="Title" />
+        <CustomInput v-model="form.description" type="text" placeholder="Description" />
+        <CustomInput v-model="form.director" type="text" placeholder="Director" />
         <button type="submit">Create Movie</button>
     </form>
 

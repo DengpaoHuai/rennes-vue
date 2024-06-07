@@ -1,39 +1,45 @@
 <script setup lang="ts">
 import { getPlanets } from '@/services/planets.service';
 import type { PlanetResponse } from '@/types/planets.types';
-import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useQuery } from '@tanstack/vue-query';
+import { onMounted, onUnmounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const router = useRouter()
-const route = useRoute()
+const page = ref(1)
+const { data, isLoading } = useQuery<PlanetResponse>(
+    {
+        queryKey: ["planets", page],
+        queryFn: () => getPlanets("https://swapi.dev/api/planets?page=" + page.value),
+        refetchOnWindowFocus: true
+    }
+)
 
-console.log(router)
-console.log(route)
-const planets = ref<PlanetResponse>({
-    count: 0,
-    next: "",
-    previous: "",
-    results: []
-})
+const scrollListener = (e) => {
+    console.log(e)
+}
 
 onMounted(() => {
-    getPlanets("https://swapi.dev/api/planets").then((data) => {
-        planets.value = data
-    })
+    window.addEventListener('scroll', scrollListener)
 })
+
+onUnmounted(() => {
+    window.removeEventListener('scroll', scrollListener)
+})
+
 </script>
 
 <template>
     <a href="/demo">go to demo</a>
-    <RouterLink to="/demo">go to demo</RouterLink>
+    <RouterLink to="/list_movies">go to demo</RouterLink>
     <button @click="router.push('/demo')">go to demo</button>
     <ul>
-        <li v-for="(planet, index) in planets.results" :key="index">
+        <li v-for="(planet, index) in data?.results" :key="index">
             {{ planet.name }}
         </li>
     </ul>
     <div>
-        <button @click="planets.previous && getData(planets.previous)" :disabled="!planets.previous">Previous</button>
-        <button @click="planets.next && getData(planets.next)" :disabled="!planets.next">Next</button>
+        <button @click="data?.previous && page--" :disabled="!data?.previous">Previous</button>
+        <button @click="data?.next && page++" :disabled="!data?.next">Next</button>
     </div>
 </template>
